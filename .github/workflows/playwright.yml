@@ -27,7 +27,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test tests/flat/search.spec.ts -g "Test logo is visible" --project=chromium
+        run: npx playwright test tests/flat/search.spec.ts --project=chromium
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
