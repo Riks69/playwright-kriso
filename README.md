@@ -1,3 +1,4 @@
+AAA
 # Playwright Test Automation – Kriso.ee Webshop
 
 E2E test automation for [Kriso.ee](https://www.kriso.ee) bookshop using [Playwright](https://playwright.dev).
