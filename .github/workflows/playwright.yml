@@ -17,8 +17,6 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      # Step 1 — Check out your repository code onto the runner.
-      # This is the same for every project — no changes needed here.
       - uses: actions/checkout@v4
 
         - name: Setup Node.js
