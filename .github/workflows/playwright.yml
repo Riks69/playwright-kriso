@@ -9,7 +9,6 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-
     timeout-minutes: 15
 
     steps:
@@ -25,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps  # INSTALL ALL BROWSERS
 
       - name: Run Playwright tests
         run: npx playwright test
