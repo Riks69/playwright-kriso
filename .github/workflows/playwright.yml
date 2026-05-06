@@ -24,18 +24,11 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: # TODO
+        run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: # TODO
+        run: npx playwright test --project=chromium
 
-      # Step 6 — Upload the HTML report so you can download it after the run.
-      # TODO: Use the actions/upload-artifact@v4 action with these settings:
-      #   - Run this step even when tests fail (if: always())
-      #   - Name the artifact 'playwright-report'
-      #   - Upload the 'playwright-report/' folder
-      #   - Keep the artifact for 14 days (retention-days)
-      # See README.md Part III — Step 9 for the full syntax.
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: always()
