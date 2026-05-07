@@ -21,7 +21,6 @@ test.describe('Search for Books by Keywords', () => {
   
       await page.goto('https://www.kriso.ee/');
       
-      // Nupp mõlemas keeles
       const consentButton = page.getByRole('button', { name: /Nõustun|Accept|OK/i });
       if (await consentButton.isVisible()) {
         await consentButton.click();
@@ -38,7 +37,6 @@ test.describe('Search for Books by Keywords', () => {
     }); 
 
     test('Test no products found for invalid keyword', async () => {
-      // Otsinguväli mõlemas keeles
       const searchInput = page.getByRole('textbox', { name: /Pealkiri, autor, ISBN, märksõ|Title, author, ISBN, keyword/i });
       await searchInput.click();
       await searchInput.fill('xqzwmfkj');
@@ -46,9 +44,9 @@ test.describe('Search for Books by Keywords', () => {
       
       await page.waitForTimeout(2000);
       
-      // Veateade mõlemas keeles
-      const errorMessage = page.getByText(/ei leitud|pole tulemusi|not found|no results/i);
-      await expect(errorMessage).toBeVisible();
+      // PARANDATUD: täpsem veateate otsing
+      const errorMessage = page.getByText(/Teie poolt sisestatud märksõnale vastavat raamatut ei leitud|The search did not find any match for your search criteria/i);
+      await expect(errorMessage).toBeVisible({ timeout: 10000 });
     });
 
     test('Test search results contain keyword "tolkien"', async () => {
@@ -59,11 +57,9 @@ test.describe('Search for Books by Keywords', () => {
       
       await page.waitForTimeout(3000);
       
-      // Kontrolli, et lehel on "Tolkien" tekst
       const tolkienText = page.getByText(/Tolkien/i);
       await expect(tolkienText.first()).toBeVisible();
       
-      // Kontrolli, et on rohkem kui 1 link
       const authorLinks = page.getByRole('link', { name: /Tolkien/i });
       const linkCount = await authorLinks.count();
       expect(linkCount).toBeGreaterThan(0);
