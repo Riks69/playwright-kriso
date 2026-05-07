@@ -27,8 +27,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test tests/flat/filters.spec.ts --project=chromium
-        run: npx playwright test tests/flat/search.spec.ts --project=chromium
+        run: npx playwright test tests/flat/search.spec.ts tests/flat/filters.spec.ts
 
 
       - name: Upload test report
