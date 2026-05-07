@@ -5,14 +5,13 @@ export class BasePage {
   protected readonly searchButton: Locator;
 
   constructor(protected page: Page) {
-    // PARANDATUD: otsinguväli mõlemas keeles
-    this.searchInput = this.page.getByRole('textbox', { name: /Pealkiri, autor, ISBN, märksõ|Title, author, ISBN, keyword/i });
-    // PARANDATUD: otsingunupp mõlemas keeles
-    this.searchButton = this.page.getByRole('button', { name: /Search|Otsi/i });
+    this.searchInput = this.page.getByRole('textbox', { name: 'Pealkiri, autor, ISBN, märksõ' });
+    // PARANDATUD: võta esimene otsingunupp
+    this.searchButton = this.page.getByRole('button', { name: 'Search' }).first();
   }
 
   async acceptCookies() {
-    const consentButton = this.page.getByRole('button', { name: /Nõustun|Accept|OK/i });
+    const consentButton = this.page.getByRole('button', { name: 'Nõustun' });
     if (await consentButton.isVisible()) {
       await consentButton.click();
     }
@@ -30,7 +29,7 @@ export class BasePage {
     await this.page.waitForTimeout(3000);
   }
 
-  async getPageTitle(): Promise<string> {
-    return await this.page.title();
+  async close() {
+    await this.page.context().close();
   }
 }
