@@ -5,13 +5,14 @@ export class BasePage {
   protected readonly searchButton: Locator;
 
   constructor(protected page: Page) {
-    // PARANDATUD: ainult getBy... meetodid
-    this.searchInput = this.page.getByRole('textbox', { name: 'Pealkiri, autor, ISBN, märksõ' });
-    this.searchButton = this.page.getByRole('button', { name: 'Search' });
+    // PARANDATUD: otsinguväli mõlemas keeles
+    this.searchInput = this.page.getByRole('textbox', { name: /Pealkiri, autor, ISBN, märksõ|Title, author, ISBN, keyword/i });
+    // PARANDATUD: otsingunupp mõlemas keeles
+    this.searchButton = this.page.getByRole('button', { name: /Search|Otsi/i });
   }
 
   async acceptCookies() {
-    const consentButton = this.page.getByRole('button', { name: 'Nõustun' });
+    const consentButton = this.page.getByRole('button', { name: /Nõustun|Accept|OK/i });
     if (await consentButton.isVisible()) {
       await consentButton.click();
     }
@@ -23,8 +24,13 @@ export class BasePage {
   }
 
   async searchByKeyword(keyword: string) {
+    await this.searchInput.waitFor({ state: 'visible' });
     await this.searchInput.fill(keyword);
     await this.searchButton.click();
-    await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(3000);
+  }
+
+  async getPageTitle(): Promise<string> {
+    return await this.page.title();
   }
 }
