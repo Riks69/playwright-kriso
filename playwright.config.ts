@@ -8,7 +8,7 @@ export default defineConfig({
 
   use: {
     baseURL: 'https://www.kriso.ee',
-    locale: 'en-GB',  // INGLISE KEEL
+    locale: 'et-EE',  // INGLISE KEEL
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'retain-on-failure',
