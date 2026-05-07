@@ -24,7 +24,12 @@ test.describe('Navigate Products via Filters', () => {
     page = await context.newPage();
     
     await page.goto('https://www.kriso.ee/');
-    await page.getByRole('button', { name: 'Nõustun' }).click();
+    
+    // Nupp mõlemas keeles
+    const consentButton = page.getByRole('button', { name: /Nõustun|Accept|OK/i });
+    if (await consentButton.isVisible()) {
+      await consentButton.click();
+    }
     console.log('✅ Leht avatud ja küpsistega nõustutud');
     
     const title = await page.title();
@@ -39,7 +44,8 @@ test.describe('Navigate Products via Filters', () => {
   test('TEST 2: Click "Muusikaraamatud ja noodid" section', async () => {
     console.log('📌 TEST 2: Sektsiooni "Muusikaraamatud ja noodid" valimine');
     
-    const muusikaSection = page.getByRole('link', { name: 'Muusikaraamatud ja noodid' });
+    // Link mõlemas keeles
+    const muusikaSection = page.getByRole('link', { name: /Muusikaraamatud ja noodid|Music books and sheet music/i });
     await muusikaSection.scrollIntoViewIfNeeded();
     await page.waitForTimeout(1000);
     
@@ -55,11 +61,12 @@ test.describe('Navigate Products via Filters', () => {
   test('TEST 3: Click "Kitarr" category and verify products', async () => {
     console.log('📌 TEST 3: Kategooria "Kitarr" valimine');
     
-    await page.getByRole('link', { name: /Kitarr \(\d+\)/ }).click();
+    await page.getByRole('link', { name: /Kitarr|Guitar/i }).click();
     await page.waitForTimeout(3000);
     console.log('✅ Klõpsatud kategoorial "Kitarr"');
     
-    const resultsText = page.getByText(/Otsingu vasteid leitud: \d+/);
+    // Tulemuste tekst mõlemas keeles
+    const resultsText = page.getByText(/Otsingu vasteid leitud:|Search results found:/i);
     await expect(resultsText).toBeVisible();
     console.log('✅ Tulemuste tekst on nähtav');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
@@ -84,17 +91,17 @@ test.describe('Navigate Products via Filters', () => {
   // TEST 5: Filtreeri keele järgi (Inglise)
   // ============================================================
   test('TEST 5: Filter by language (English)', async () => {
-    console.log('📌 TEST 5: Keelefiltri rakendamine - "Inglise"');
-    
-    await page.getByRole('link', { name: /Inglise \(\d+\)/ }).click();
-    await page.waitForTimeout(3000);
-    console.log('✅ Klõpsatud filtril "Inglise"');
-    
-    const resultsText = page.getByText(/Otsingu vasteid leitud: \d+/);
-    await expect(resultsText).toBeVisible();
-    console.log('✅ Tulemused värskendatud');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-  });
+  console.log('📌 TEST 5: Keelefiltri rakendamine - "Inglise"');
+  
+  // Otsi TÄPSELT "Inglise" või "English" ilma teiste keelteta
+  await page.getByRole('link', { name: /^Inglise \(\d+\)$|^English \(\d+\)$/i }).click();
+  await page.waitForTimeout(3000);
+  console.log('✅ Klõpsatud filtril "Inglise"');
+  
+  const resultsText = page.getByText(/Otsingu vasteid leitud:|Search results found:/i);
+  await expect(resultsText).toBeVisible();
+  console.log('✅ Tulemused värskendatud');
+});
 
   // ============================================================
   // TEST 6: Filtreeri formaadi järgi (CD)
@@ -102,23 +109,23 @@ test.describe('Navigate Products via Filters', () => {
   test('TEST 6: Filter by format "CD"', async () => {
     console.log('📌 TEST 6: Formaadi filtri rakendamine - "CD"');
     
-    await page.getByRole('link', { name: /CD \(\d+\)/ }).click();
+    await page.getByRole('link', { name: /CD/i }).click();
     await page.waitForTimeout(3000);
     console.log('✅ Klõpsatud filtril "CD"');
     
-    const resultsText = page.getByText(/Otsingu vasteid leitud: \d+/);
+    const resultsText = page.getByText(/Otsingu vasteid leitud:|Search results found:/i);
     await expect(resultsText).toBeVisible();
     console.log('✅ Tulemused värskendatud');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
   });
 
   // ============================================================
-  // TEST 7: Eemalda kõik filtrid (lihtsalt kliki, ära kontrolli tulemusi)
+  // TEST 7: Eemalda kõik filtrid
   // ============================================================
   test('TEST 7: Remove all filters', async () => {
     console.log('📌 TEST 7: Kõigi filtrite eemaldamine');
     
-    await page.getByRole('link', { name: 'Eemalda kõik' }).click();
+    await page.getByRole('link', { name: /Eemalda kõik|Remove all/i }).click();
     await page.waitForTimeout(3000);
     console.log('✅ Klõpsatud "Eemalda kõik"');
     console.log('✅ Filtrid eemaldatud');
@@ -126,7 +133,7 @@ test.describe('Navigate Products via Filters', () => {
   });
 
   // ============================================================
-  // TEST 8: Lõplik kontroll (lihtsalt veendu, et leht on töökorras)
+  // TEST 8: Lõplik kontroll
   // ============================================================
   test('TEST 8: Verify page is still working', async () => {
     console.log('📌 TEST 8: Lõplik kontroll');

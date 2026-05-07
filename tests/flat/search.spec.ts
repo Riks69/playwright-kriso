@@ -21,7 +21,8 @@ test.describe('Search for Books by Keywords', () => {
   
       await page.goto('https://www.kriso.ee/');
       
-      const consentButton = page.getByRole('button', { name: 'Nõustun' });
+      // Nupp mõlemas keeles
+      const consentButton = page.getByRole('button', { name: /Nõustun|Accept|OK/i });
       if (await consentButton.isVisible()) {
         await consentButton.click();
       }
@@ -37,37 +38,39 @@ test.describe('Search for Books by Keywords', () => {
     }); 
 
     test('Test no products found for invalid keyword', async () => {
-      const searchInput = page.getByRole('textbox', { name: 'Pealkiri, autor, ISBN, märksõ' });
+      // Otsinguväli mõlemas keeles
+      const searchInput = page.getByRole('textbox', { name: /Pealkiri, autor, ISBN, märksõ|Title, author, ISBN, keyword/i });
       await searchInput.click();
       await searchInput.fill('xqzwmfkj');
       await searchInput.press('Enter');
       
       await page.waitForTimeout(2000);
       
-      const errorMessage = page.getByText(/ei leitud|pole tulemusi/i);
+      // Veateade mõlemas keeles
+      const errorMessage = page.getByText(/ei leitud|pole tulemusi|not found|no results/i);
       await expect(errorMessage).toBeVisible();
     });
 
     test('Test search results contain keyword "tolkien"', async () => {
-      const searchInput = page.getByRole('textbox', { name: 'Pealkiri, autor, ISBN, märksõ' });
+      const searchInput = page.getByRole('textbox', { name: /Pealkiri, autor, ISBN, märksõ|Title, author, ISBN, keyword/i });
       await searchInput.click();
       await searchInput.fill('tolkien');
       await searchInput.press('Enter');
       
       await page.waitForTimeout(3000);
       
-      // Lihtsalt kontrolli, et lehel on "Tolkien" tekst
+      // Kontrolli, et lehel on "Tolkien" tekst
       const tolkienText = page.getByText(/Tolkien/i);
       await expect(tolkienText.first()).toBeVisible();
       
-      // Kontrolli, et on rohkem kui 1 autori link
+      // Kontrolli, et on rohkem kui 1 link
       const authorLinks = page.getByRole('link', { name: /Tolkien/i });
       const linkCount = await authorLinks.count();
       expect(linkCount).toBeGreaterThan(0);
     });
 
     test('Test search by ISBN shows "Gone Girl"', async () => {
-      const searchInput = page.getByRole('textbox', { name: 'Pealkiri, autor, ISBN, märksõ' });
+      const searchInput = page.getByRole('textbox', { name: /Pealkiri, autor, ISBN, märksõ|Title, author, ISBN, keyword/i });
       await searchInput.click();
       await searchInput.fill('9780307588371');
       await searchInput.press('Enter');

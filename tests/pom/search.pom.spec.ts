@@ -16,10 +16,10 @@ test.describe('Search for Books by Keywords (POM)', () => {
     const page = await context.newPage();
     homePage = new HomePage(page);
     await homePage.openUrl();
-    // await homePage.acceptCookies();
+    // Küpsiste nõusolek on kommenteeritud - ei põhjusta probleeme
   });
 
-  test.afterAll(async ({ browser }) => {
+  test.afterAll(async () => {
     await homePage.close?.();
   });
 

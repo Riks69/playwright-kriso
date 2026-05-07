@@ -2,7 +2,7 @@
  * Part II — Page Object Model tests
  * Test suite: Navigate Products via Filters
  */
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '../../pages/HomePage';
 
 test.describe.configure({ mode: 'serial' });
@@ -16,7 +16,7 @@ test.describe('Navigate Products via Filters (POM)', () => {
     const page = await context.newPage();
     homePage = new HomePage(page);
     await homePage.openUrl();
-    // await homePage.acceptCookies();
+    // Küpsiste nõusolek on kommenteeritud - ei põhjusta probleeme
   });
 
   test.afterAll(async () => {

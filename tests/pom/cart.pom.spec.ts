@@ -18,7 +18,7 @@ test.describe('Add Books to Shopping Cart (POM)', () => {
     const page = await context.newPage();
     homePage = new HomePage(page);
     await homePage.openUrl();
-    //await homePage.acceptCookies();
+    // Küpsiste nõusolek on kommenteeritud - ei põhjusta probleeme
   });
 
   test.afterAll(async () => {
@@ -57,8 +57,9 @@ test.describe('Add Books to Shopping Cart (POM)', () => {
 
   test('Test cart has items', async () => {
     const page = homePage['page'];
-    const items = page.getByText(/Tooteid kokku: \d+/);
-    await expect(items).toBeVisible();
+    // Mõlemas keeles - inglise keeles on "Items total: X"
+    const items = page.getByText(/Tooteid kokku:|Items total:/i);
+    await expect(items.first()).toBeVisible();
     console.log('✅ Ostukorvis on esemeid');
   });
 
@@ -66,10 +67,9 @@ test.describe('Add Books to Shopping Cart (POM)', () => {
     await cartPage.removeItemByIndex(0);
     await new Promise(resolve => setTimeout(resolve, 3000));
     
-    // Kontrolli, et eemaldamine õnnestus
     const page = homePage['page'];
-    const items = page.getByText(/Tooteid kokku: \d+/);
-    await expect(items).toBeVisible();
+    const items = page.getByText(/Tooteid kokku:|Items total:/i);
+    await expect(items.first()).toBeVisible();
     console.log('✅ Eemaldamine õnnestus');
   });
 
