@@ -16,7 +16,7 @@ test.describe('Navigate Products via Filters (POM)', () => {
     const page = await context.newPage();
     homePage = new HomePage(page);
     await homePage.openUrl();
-    await homePage.acceptCookies();
+    // await homePage.acceptCookies();
   });
 
   test.afterAll(async () => {

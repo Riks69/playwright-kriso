@@ -14,6 +14,7 @@ export class HomePage extends BasePage {
     this.cartLink = this.page.locator('.icon-bag, a[href*="basket"]').first();
   }
 
+  
   async openUrl() {
     await this.page.goto(this.url);
   }
